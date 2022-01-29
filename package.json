@@ -4,7 +4,7 @@
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --public-url https://wzuqui.github.io/game-mario-typescript/"
   },
   "dependencies": {
     "parcel-bundler": "1.6.1"
