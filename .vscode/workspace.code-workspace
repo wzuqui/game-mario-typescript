@@ -5,6 +5,8 @@
     }
   ],
   "settings": {
-    "conventionalCommits.scopes": ["game", "parcel"]
+    "conventionalCommits.scopes": ["game", "parcel"],
+    "liveServer.settings.multiRootWorkspaceName": "game-mario-typescript",
+    "liveServer.settings.root": "dist"
   }
 }

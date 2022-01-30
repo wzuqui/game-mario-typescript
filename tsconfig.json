@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "experimentalDecorators": true,
-    "isolatedModules": true,
-    "jsxImportSource": "react",
-    "outDir": "dist",
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "lib": ["es6", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
     "rootDir": "src",
     "sourceMap": true,
     "strict": true,
-    "target": "es2021",
-    "allowSyntheticDefaultImports": true
-  },
-  "exclude": ["dist", "node_modules"]
+    "target": "ES5"
+  }
 }
