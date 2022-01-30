@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "module": "commonjs",
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "sourceMap": true,
     "allowJs": true,
-    "lib": ["es6", "dom"],
+    "experimentalDecorators": true,
+    "isolatedModules": true,
+    "jsxImportSource": "react",
+    "outDir": "dist",
     "rootDir": "src",
-    "moduleResolution": "node"
-  }
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2021",
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["dist", "node_modules"]
 }

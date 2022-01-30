@@ -1,17 +1,27 @@
 import { createImage } from './createImage';
+import { GameKeys } from './GameKeys';
 import spriteRunLeftImageSource from './img/spriteRunLeft.png';
 import spriteRunRightImageSource from './img/spriteRunRight.png';
 import spriteStandLeftImageSource from './img/spriteStandLeft.png';
 import spriteStandRightImageSource from './img/spriteStandRight.png';
 
 export class Player {
-  width: number;
-  height: number;
-  speed: number;
-  position: { x: number; y: number };
-  velocity: { x: number; y: number };
-  frames: number;
-  sprites: {
+  public readonly speed: number;
+  public readonly position: { x: number; y: number };
+  public readonly velocity: { x: number; y: number };
+
+  public get width() {
+    return this._width;
+  }
+  public get height() {
+    return this._height;
+  }
+
+  private readonly jumpHeight: number;
+  private _height: number;
+  private _width: number;
+  private frames: number;
+  private sprites: {
     stand: {
       right: HTMLImageElement;
       left: HTMLImageElement;
@@ -34,6 +44,7 @@ export class Player {
     private gravity: number
   ) {
     this.speed = 10;
+    this.jumpHeight = -25;
     this.position = {
       x: 100,
       y: 100,
@@ -43,8 +54,8 @@ export class Player {
       y: 20,
     };
 
-    this.width = 66;
-    this.height = 150;
+    this._width = 66;
+    this._height = 150;
 
     this.frames = 0;
     this.sprites = {
@@ -74,7 +85,7 @@ export class Player {
       400,
       this.position.x,
       this.position.y,
-      this.width,
+      this._width,
       this.height
     );
   }
@@ -100,6 +111,50 @@ export class Player {
 
     if (this.position.y + this.height + this.velocity.y <= this.canvas.height) {
       this.velocity.y += this.gravity;
+    }
+  }
+
+  jump() {
+    this.velocity.y = this.jumpHeight;
+  }
+
+  spriteSwitching(keys: GameKeys, lastKey?: 'right' | 'left') {
+    if (
+      keys.right.pressed &&
+      lastKey === 'right' &&
+      this.currentSprinte !== this.sprites.run.right
+    ) {
+      this.frames = 1;
+      this.currentSprinte = this.sprites.run.right;
+      this.currentCropWidth = this.sprites.run.cropWidth;
+      this._width = this.sprites.run.width;
+    } else if (
+      keys.left.pressed &&
+      lastKey === 'left' &&
+      this.currentSprinte !== this.sprites.run.left
+    ) {
+      this.frames = 1;
+      this.currentSprinte = this.sprites.run.left;
+      this.currentCropWidth = this.sprites.run.cropWidth;
+      this._width = this.sprites.run.width;
+    } else if (
+      !keys.right.pressed &&
+      lastKey === 'right' &&
+      this.currentSprinte !== this.sprites.stand.right
+    ) {
+      this.frames = 1;
+      this.currentSprinte = this.sprites.stand.right;
+      this.currentCropWidth = this.sprites.stand.cropWidth;
+      this._width = this.sprites.stand.width;
+    } else if (
+      !keys.left.pressed &&
+      lastKey === 'left' &&
+      this.currentSprinte !== this.sprites.stand.left
+    ) {
+      this.frames = 1;
+      this.currentSprinte = this.sprites.stand.left;
+      this.currentCropWidth = this.sprites.stand.cropWidth;
+      this._width = this.sprites.stand.width;
     }
   }
 }

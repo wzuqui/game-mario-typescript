@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,6 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run build
-      - run: mv ./dist/game-mario-typescript.html ./dist/index.html 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

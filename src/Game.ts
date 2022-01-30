@@ -1,4 +1,5 @@
 import { createImage } from './createImage';
+import { GameKeys } from './GameKeys';
 import { GenericObject } from './GenericObject';
 import backgroundImageSource from './img/background.png';
 import hillsImageSource from './img/hills.png';
@@ -13,7 +14,7 @@ export class Game {
   player!: Player;
   platforms!: Platform[];
   genericObjects!: GenericObject[];
-  keys!: { left: { pressed: boolean }; right: { pressed: boolean } };
+  keys!: GameKeys;
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   gravity: number;
@@ -21,7 +22,8 @@ export class Game {
   hillsImage: HTMLImageElement;
   platformSmallTallImage: HTMLImageElement;
   floorPlatformYPosition: number;
-  lastKey?: string;
+  lastKey?: 'right' | 'left';
+  playerIsOnTheFloor!: boolean;
 
   constructor() {
     this.canvas = document.querySelector('canvas') as HTMLCanvasElement;
@@ -42,17 +44,14 @@ export class Game {
   }
 
   init() {
-    this.player = new Player(this.canvas, this.context, this.gravity);
+    this.scrollOffset = 0;
+    this.playerIsOnTheFloor = false;
+    this.keys = new GameKeys();
 
     this.createBackground();
     this.createPlatforms();
 
-    this.keys = {
-      left: { pressed: false },
-      right: { pressed: false },
-    };
-
-    this.scrollOffset = 0;
+    this.player = new Player(this.canvas, this.context, this.gravity);
   }
 
   private createBackground() {
@@ -72,46 +71,16 @@ export class Game {
 
   private createPlatforms() {
     this.platforms = [
-      new Platform(this.context, {
-        x:
-          this.platformImage.width * 4 +
-          300 -
-          2 +
-          this.platformImage.width -
-          this.platformSmallTallImage.width,
-        y: 270,
-        image: this.platformSmallTallImage,
-      }),
-      new Platform(this.context, {
-        x: -1,
-        y: this.floorPlatformYPosition,
-        image: this.platformImage,
-      }),
-      new Platform(this.context, {
-        x: this.platformImage.width - 3,
-        y: this.floorPlatformYPosition,
-        image: this.platformImage,
-      }),
-      new Platform(this.context, {
-        x: this.platformImage.width * 2 + 100,
-        y: this.floorPlatformYPosition,
-        image: this.platformImage,
-      }),
-      new Platform(this.context, {
-        x: this.platformImage.width * 3 + 300,
-        y: this.floorPlatformYPosition,
-        image: this.platformImage,
-      }),
-      new Platform(this.context, {
-        x: this.platformImage.width * 4 + 300 - 2,
-        y: this.floorPlatformYPosition,
-        image: this.platformImage,
-      }),
-      new Platform(this.context, {
-        x: this.platformImage.width * 5 + 700 - 2,
-        y: this.floorPlatformYPosition,
-        image: this.platformImage,
-      }),
+      ...newPlatform(this, 1, 400, 250, this.platformSmallTallImage),
+      ...newPlatform(this, 2),
+      ...newPlatform(
+        this,
+        1,
+        2 * this.platformImage.width + 350,
+        250,
+        this.platformSmallTallImage
+      ),
+      ...newPlatform(this, 1, 2 * this.platformImage.width + 300),
     ];
   }
 
@@ -173,47 +142,12 @@ export class Game {
         this.player.position.x <= platform.position.x + platform.width
       ) {
         this.player.velocity.y = 0;
+        this.playerIsOnTheFloor = true;
       }
     });
 
     // spriteSwitching
-    if (
-      this.keys.right.pressed &&
-      this.lastKey === 'right' &&
-      this.player.currentSprinte !== this.player.sprites.run.right
-    ) {
-      this.player.frames = 1;
-      this.player.currentSprinte = this.player.sprites.run.right;
-      this.player.currentCropWidth = this.player.sprites.run.cropWidth;
-      this.player.width = this.player.sprites.run.width;
-    } else if (
-      this.keys.left.pressed &&
-      this.lastKey === 'left' &&
-      this.player.currentSprinte !== this.player.sprites.run.left
-    ) {
-      this.player.frames = 1;
-      this.player.currentSprinte = this.player.sprites.run.left;
-      this.player.currentCropWidth = this.player.sprites.run.cropWidth;
-      this.player.width = this.player.sprites.run.width;
-    } else if (
-      !this.keys.right.pressed &&
-      this.lastKey === 'right' &&
-      this.player.currentSprinte !== this.player.sprites.stand.right
-    ) {
-      this.player.frames = 1;
-      this.player.currentSprinte = this.player.sprites.stand.right;
-      this.player.currentCropWidth = this.player.sprites.stand.cropWidth;
-      this.player.width = this.player.sprites.stand.width;
-    } else if (
-      !this.keys.left.pressed &&
-      this.lastKey === 'left' &&
-      this.player.currentSprinte !== this.player.sprites.stand.left
-    ) {
-      this.player.frames = 1;
-      this.player.currentSprinte = this.player.sprites.stand.left;
-      this.player.currentCropWidth = this.player.sprites.stand.cropWidth;
-      this.player.width = this.player.sprites.stand.width;
-    }
+    this.player.spriteSwitching(this.keys, this.lastKey);
 
     // win condition
     const scrollOffsetPositionWin = this.platformImage.width * 5 + 300 - 2;
@@ -243,7 +177,11 @@ export class Game {
           break;
 
         case 'ArrowUp':
-          this.player.velocity.y = -25;
+          if (!this.keys.up.pressed && this.playerIsOnTheFloor) {
+            this.playerIsOnTheFloor = false;
+            this.player.jump();
+          }
+          this.keys.up.pressed = true;
           break;
       }
     });
@@ -262,8 +200,35 @@ export class Game {
           break;
 
         case 'ArrowUp':
+          this.keys.up.pressed = false;
           break;
       }
     });
   }
+}
+
+function newPlatform(
+  that: Game,
+  size: number,
+  x?: number,
+  y?: number,
+  image?: HTMLImageElement
+): Platform[] {
+  x ??= -1;
+  y ??= that.floorPlatformYPosition;
+  image ??= that.platformImage;
+
+  const result: Platform[] = [];
+
+  for (let index = 0; index < size; index++) {
+    result.push(
+      new Platform(that.context, {
+        x: x + index * (image.width - 2),
+        y,
+        image,
+      })
+    );
+  }
+
+  return result;
 }
