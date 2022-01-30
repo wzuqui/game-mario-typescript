@@ -5,23 +5,23 @@ require=function(r,e,n){function t(n,o){function i(r){return t(i.resolve(r))}fun
 },{}],11:[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.GenericObject=void 0;var t=function(){function t(t,i){var e=i.x,o=i.y,s=i.image;this.context=t,this.position={x:e,y:o},this.image=s,this.width=s.width,this.height=s.height}return t.prototype.draw=function(){this.context.drawImage(this.image,this.position.x,this.position.y)},t}();exports.GenericObject=t;
 },{}],12:[function(require,module,exports) {
-module.exports="/dist/22aeb9447d36a623794f5b385dc62918.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/22aeb9447d36a623794f5b385dc62918.png";
 },{}],13:[function(require,module,exports) {
-module.exports="/dist/3d682d6b59ddeda1b5955e64971d436a.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/3d682d6b59ddeda1b5955e64971d436a.png";
 },{}],14:[function(require,module,exports) {
-module.exports="/dist/520fcf7a076096dbd6fccc86a1bb9f27.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/520fcf7a076096dbd6fccc86a1bb9f27.png";
 },{}],15:[function(require,module,exports) {
-module.exports="/dist/724f4e82450e8dbb792b41b4128351d8.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/724f4e82450e8dbb792b41b4128351d8.png";
 },{}],16:[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.Platform=void 0;var t=function(){function t(t,i){var e=i.x,o=i.y,s=i.image;this.context=t,this.position={x:e,y:o},this.image=s,this.width=s.width,this.height=s.height}return t.prototype.draw=function(){this.context.drawImage(this.image,this.position.x,this.position.y)},t}();exports.Platform=t;
 },{}],26:[function(require,module,exports) {
-module.exports="/dist/d5c5f27a92f1ccab0d949e8fbfbb8214.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/d5c5f27a92f1ccab0d949e8fbfbb8214.png";
 },{}],27:[function(require,module,exports) {
-module.exports="/dist/d65f72e0bf3c7372fbfa55d1f017157c.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/d65f72e0bf3c7372fbfa55d1f017157c.png";
 },{}],28:[function(require,module,exports) {
-module.exports="/dist/a2ed00064fd154cca7ff657d84435ee3.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/a2ed00064fd154cca7ff657d84435ee3.png";
 },{}],29:[function(require,module,exports) {
-module.exports="/dist/a4d4e270a3d04d123f2f445c52d5f13a.png";
+module.exports="https://wzuqui.github.io/game-mario-typescript/a4d4e270a3d04d123f2f445c52d5f13a.png";
 },{}],17:[function(require,module,exports) {
 "use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.Player=void 0;var i=require("./createImage"),e=t(require("./img/spriteRunLeft.png")),s=t(require("./img/spriteRunRight.png")),r=t(require("./img/spriteStandLeft.png")),h=t(require("./img/spriteStandRight.png")),n=function(){function t(t,n,a){this.canvas=t,this.context=n,this.gravity=a,this.speed=10,this.position={x:100,y:100},this.velocity={x:0,y:20},this.width=66,this.height=150,this.frames=0,this.sprites={stand:{right:(0,i.createImage)(h.default),left:(0,i.createImage)(r.default),cropWidth:177,width:66},run:{right:(0,i.createImage)(s.default),left:(0,i.createImage)(e.default),cropWidth:341,width:127.875}},this.currentSprinte=this.sprites.stand.right,this.currentCropWidth=this.sprites.stand.cropWidth}return t.prototype.draw=function(){this.context.drawImage(this.currentSprinte,this.currentCropWidth*this.frames,0,this.currentCropWidth,400,this.position.x,this.position.y,this.width,this.height)},t.prototype.update=function(){this.frames++,this.frames>59&&(this.currentSprinte===this.sprites.stand.right||this.currentSprinte===this.sprites.stand.left)?this.frames=0:this.frames>29&&(this.currentSprinte===this.sprites.run.right||this.currentSprinte===this.sprites.run.left)&&(this.frames=0),this.draw(),this.position.y+=this.velocity.y,this.position.x+=this.velocity.x,this.position.y+this.height+this.velocity.y<=this.canvas.height&&(this.velocity.y+=this.gravity)},t}();exports.Player=n;
 },{"./createImage":10,"./img/spriteRunLeft.png":26,"./img/spriteRunRight.png":27,"./img/spriteStandLeft.png":28,"./img/spriteStandRight.png":29}],7:[function(require,module,exports) {
