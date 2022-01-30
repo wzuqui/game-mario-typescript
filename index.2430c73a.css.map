@@ -1,0 +1,1 @@
+{"mappings":"AAAA,KAIA,kBAAA,CAFA,qBAAA,CACA,YAAA,CAEA,sBAAA,CAJA,QAKA,CACA,KACA,eACA","sources":["src/style.css"],"sourcesContent":["body {\n  margin: 0;\n  background-color: black;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\nhtml {\n  overflow: hidden;\n}\n"],"names":[],"version":3,"file":"index.2430c73a.css.map"}
