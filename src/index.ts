@@ -1,4 +1,4 @@
 import './style.css';
-import { Game } from './Game';
+import { Game } from './game/Game';
 
-const game = new Game();
+const _ = new Game();
